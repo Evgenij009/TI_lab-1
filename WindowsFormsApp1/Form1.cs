@@ -92,23 +92,22 @@ namespace WindowsFormsApp1
 
                 if (rB_columnMethod.Checked)
                 {
-                    for (int i = 0; i < sequenceDigits.Length; ++i)
+                    for (int i = 0; i < englishAlphabet.Length; ++i)
                         for (int j = 0; j < key.Length; ++j)
-                            if (sequenceDigits[i] != key[j])
+                            if (englishAlphabet[i] == key[j])
                             {
-                                isValid = false;
-                                MessageBox.Show("Error: Key is invalid!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                return false;
+                                isValid = true;
+                                i = englishAlphabet.Length - 1;
                             }
                 }
                 else
                 {
-                    for (int i = 0; i < englishAlphabet.Length; ++i)
+                    for (int i = 0; i < sequenceDigits.Length; ++i)
                         for (int j = 0; j < key.Length; ++j)
-                            if (englishAlphabet[i] != key[j])
+                            if (sequenceDigits[i] == key[j])
                             {
-                                isValid = false;
-                                i = englishAlphabet.Length - 1;
+                                isValid = true;
+                                i = sequenceDigits.Length -1 ;
                             }
                 }
 
@@ -119,11 +118,29 @@ namespace WindowsFormsApp1
                                     return true;
                 
                             
-                MessageBox.Show("Error: data invalid! Please, enter english Alphabet.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Error: data invalid! ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
 
             return false;
+        }
+
+        private string parseToDigitString(string key)
+        {
+            string result = "";
+            String sequenceDigits = "0123456789";
+
+            for (int i = 0; i < sequenceDigits.Length; ++i)
+            {
+                for (int j = 0; j < key.Length; ++j)
+                {
+                    if (sequenceDigits[i] == key[j])
+                    {
+                        result += key[j];
+                    }
+                }
+            }
+            return result;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -135,12 +152,14 @@ namespace WindowsFormsApp1
                 if (richTextBox1.Text != "")
                     if (textBox_key.Text != "")
                     {
+                            Key = parseToDigitString(Key);
                         DataEncryption dataEncryption = new DataEncryption(richTextBox1.Text, Key);
                         String answerLine = null;
                         //RUN encrypt
                         if (rB_railFence.Checked)
                         { 
-                            int number;
+                            int number = 0;
+                                
                             if (int.TryParse(Key, out number))
                             {
                                 if (number > 1 && number < 99999)
@@ -173,7 +192,8 @@ namespace WindowsFormsApp1
                 {
                     if (textBox_key.Text != "")
                     {
-                        DataEncryption dataEncryption = new DataEncryption(richTextBox2.Text, Key);
+                            Key = parseToDigitString(Key);
+                            DataEncryption dataEncryption = new DataEncryption(richTextBox2.Text, Key);
                         String answerLine = null;
                         //RUN decipher
                         if (rB_railFence.Checked)
